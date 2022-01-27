@@ -1,0 +1,4 @@
+#!/bin/bash
+oldtool=${1%.*}
+zenity --width=300  --height=100 --no-wrap --info  --title "Tool remove" --text "Please manually remove tool $oldtool from spindel and press ok to continue"
+exit 0

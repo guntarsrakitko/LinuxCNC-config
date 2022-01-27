@@ -1,0 +1,105 @@
+#*******************
+#  IO - INPUTS 
+#*******************
+
+net atc-sen-tool-loaded         <= motion.digital-in-00
+net atc-sen-drawbar-loose       <= motion.digital-in-01
+net tool-rack-sen-retracted     <= motion.digital-in-02
+net tool-rack-sen-extended      <= motion.digital-in-03
+net air-presure-ok-sen          <= motion.digital-in-04
+net tool-cover-sen-closed       <= motion.digital-in-05
+net tool-cover-sen-opened       <= motion.digital-in-06
+net spindle-running             <= motion.digital-in-07
+
+#*******************
+#  IO - OUTPUTS 
+#*******************
+
+
+net atc-drawbar-loose-automatic => motion.digital-out-00
+net atc-sol-dust-removal        => motion.digital-out-01
+net tool-rack-sol-extend-out    => motion.digital-out-02
+net tool-rack-sol-retract-out   => motion.digital-out-03
+net tool-cover-sol-open         => motion.digital-out-04
+net tool-cover-sol-close        => motion.digital-out-05
+
+net toolnumber  iocontrol.0.tool-number 
+net toolprepnumber iocontrol.0.tool-prep-number  
+net pocketprepnumer iocontrol.0.tool-prep-pocket 
+
+# This is a map of the pocketprepnumber to an analog pin to correctly transfer the informaton into the M6 remap as the regular handler appears to be broken
+addf conv-s32-float.0 servo-thread
+net pocketprepnumer conv-s32-float.0.in
+net transferpocket2 conv-s32-float.0.out motion.analog-in-00
+
+net m-return-01 motion.analog-in-01
+
+
+#********************************************************
+# ATC
+#********************************************************
+
+# checking is it safe to relase the drawbar and releasing frawbar
+addf lut5.0 servo-thread
+setp lut5.0.function 0x40
+net  spindle-running => lut5.0.in-0        #0
+net  machine-is-enabled => lut5.0.in-1     #1
+net  atc-drawbar-loose => lut5.0.in-2      #1
+net  atc-sol-drawbar-loose lut5.0.out      #out
+
+
+# combaining automatic and manual drwbar relese
+addf or2.0 servo-thread
+net atc-drawbar-loose-manual-button-toogle => or2.0.in0
+net atc-drawbar-loose-automatic => or2.0.in1
+net atc-drawbar-loose <= or2.0.out
+
+# disabling buton in case if spindle ir running or automatic relese is requested
+addf lut5.1 servo-thread
+setp lut5.1.function 0x10
+net  spindle-running => lut5.1.in-0                       #0
+net  atc-drawbar-loose-automatic =>  lut5.1.in-1          #0
+net  atc-drawbar-loose-manual-button =>  lut5.1.in-2      #1
+net  atc-drawbar-loose-manual-button-ok <= lut5.1.out     #out
+
+# adding toogle button for manual drawbar release 
+addf toggle.0 servo-thread
+net atc-drawbar-loose-manual-button-ok => toggle.0.in
+net atc-drawbar-loose-manual-button-toogle <= toggle.0.out
+
+
+# inverting atc-manual-button-toogle signal to use it in oneshot 
+addf not.0 servo-thread
+net atc-drawbar-loose => not.0.in
+net atc-drawbar-loose_n <= not.0.out
+
+# creating one shot to enable atc-sol-air-return for 3 sec
+addf oneshot.0 servo-thread
+setp oneshot.0.width 3
+net atc-drawbar-loose_n => oneshot.0.in
+net atc-sol-air-return <= oneshot.0.out
+net atc-drawbar-loose => oneshot.0.reset
+
+
+#********************************************************
+# TOOL RACK
+#********************************************************
+
+# extend tool rack, check if retrack sol is off and cover is open
+addf lut5.4 servo-thread
+setp lut5.4.function 0x8
+net  tool-cover-sen-opened      => lut5.4.in-0           #1
+net  tool-rack-sol-extend-out   => lut5.4.in-1           #1
+net  tool-rack-sol-retract-out  => lut5.4.in-2           #0
+net  tool-rack-sol-extend       => lut5.4.out            #out
+
+
+# retrack tool rack, check if extend sol is off and cover is open
+addf lut5.5 servo-thread
+setp lut5.5.function 0x8
+net  tool-cover-sen-opened      => lut5.5.in-0           #1
+net  tool-rack-sol-retract-out  => lut5.5.in-1           #1
+net  tool-rack-sol-extend-out   => lut5.5.in-2           #0
+net  tool-rack-sol-retract      => lut5.5.out            #out
+
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+newtool=${1%.*}
+#zenity --width=300  --height=100 --no-wrap --info  --title "Tool insert" --text "Please manually insert tool $newtool in spindel and press ok to continue" 
+zenity --width=300  --height=100 --no-wrap --question --title "Air presure warning" --text "Air presure is lower than 5 bar, please ensure that presure is higer that 5 bar and click Continue" --ok-label "Continue" --cancel-label "Cancel"
+halcmd sets m-return-01 $?
+#--ok-label "ok" --cancel-label "cancel"
+exit 0

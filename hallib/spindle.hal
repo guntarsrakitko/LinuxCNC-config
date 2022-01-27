@@ -1,0 +1,92 @@
+
+#loadusr -Wn spindle mitsub_vfd --baud 9600 --port /dev/ttyUSB0 spindle=01
+
+#setp spindle.scale-cmd 1
+#setp spindle.scale-fb 60
+#setp spindle.monitor 1
+
+#net spindle-vel-cmd-rps-abs    <=  spindle.0.speed-out-rps-abs
+#net spindle-vel-cmd-rps        <=  spindle.0.speed-out-rps			=> spindle.motor-cmd
+#net spindle-vel-cmd-rpm        <=  spindle.0.speed-out
+#net spindle-vel-cmd-rpm-abs    <=  spindle.0.speed-out-abs
+
+#net spindle-on             	   <=  spindle.0.on						=> spindle.run
+#net spindle-cw                 <=  spindle.0.forward				=> spindle.fwd
+#net spindle-ccw                <=  spindle.0.reverse
+
+#net spindle-at-speed           =>  spindle.0.at-speed				<=  spindle.up-to-speed
+#net spindle-revs               =>  spindle.0.revs					<=  spindle.motor-fb 
+#net spindle-vel-fb-rps         =>  spindle.0.speed-in
+#net spindle-index-enable      <=>  spindle.0.index-enable
+#net spindle-speed-indicator    
+			   
+
+
+#net spindle-on => hm2_7i76e.0.7i76.0.0.output-02 # chiller-enable
+#net spindle-on => hm2_7i76e.0.7i76.0.0.output-07 # atc-air-sealed-sol-3 
+
+
+# Spindle
+#[SPINDLE]OUTPUT_MIN_LIMIT
+#[SPINDLE]OUTPUT_MAX_LIMIT
+#[SPINDLE]OUTPUT_SCALE
+
+#*******************
+#  SPINDLE
+#*******************
+# ---setup spindle control signals---
+net spindle-vel-cmd-rps        <=  spindle.0.speed-out-rps
+net spindle-vel-cmd-rps-abs    <=  spindle.0.speed-out-rps-abs
+net spindle-vel-cmd-rpm        <=  spindle.0.speed-out
+net spindle-vel-cmd-rpm-abs    <=  spindle.0.speed-out-abs
+net spindle-enable             <=  spindle.0.on
+net spindle-cw                 <=  spindle.0.forward
+net spindle-ccw                <=  spindle.0.reverse
+net spindle-brake              <=  spindle.0.brake
+net spindle-revs               =>  spindle.0.revs
+net spindle-at-speed           =>  spindle.0.at-speed
+net spindle-vel-fb-rps         =>  spindle.0.speed-in
+net spindle-index-enable      <=>  spindle.0.index-enable
+
+#******************************
+# SETUP SPINDLE CONTROL VIA MODBUS
+#******************************
+# VFD Connection via Modbus 
+# Load from different Device (i.e. USB when not using onboard components; Baudrate needs to be set in VFD using Hitachi ProDrive)
+loadusr -W wj200_vfd --device /dev/ttyUSB0 --baud 9600 --parity N --data 8 --stop 1
+setp wj200-vfd.0.mbslaveaddr 1
+setp wj200-vfd.0.enable 1
+
+# Connect relevant commands of spindle.0 to wj200-vfd
+net spindle-vel-cmd-rps-abs         => wj200-vfd.0.commanded-frequency
+net spindle-enable-ok               => wj200-vfd.0.run
+net spindle-ccw spindle.0.reverse   => wj200-vfd.0.reverse
+net spindle-at-speed                <= wj200-vfd.0.is-at-speed
+net spindle-running                 <= wj200-vfd.0.is-running 
+net estop-vfdalarm                  <= wj200-vfd.0.is-alarm
+net vfd-watchdog                    <= wj200-vfd.0.watchdog-out
+
+addf lut5.2 servo-thread
+setp lut5.2.function 0x4
+net  atc-sol-drawbar-loose  => lut5.2.in-0    #0
+net  spindle-enable         => lut5.2.in-1    #1
+net  spindle-enable-ok      <= lut5.2.out     #out
+
+#wj200-vfd.N.commanded-frequency float in
+#Frequency of vfd
+#wj200-vfd.N.reverse bit in
+#1 when reverse 0 when forward
+#wj200-vfd.N.run bit in
+#run the vfd
+#wj200-vfd.N.enable bit in
+#1 to enable the vfd. 0 will remote trip the vfd, thereby disabling it.
+#wj200-vfd.N.is-running bit out
+#1 when running
+#wj200-vfd.N.is-at-speed bit out
+#1 when running at assigned frequency
+#wj200-vfd.N.is-ready bit out
+#1 when vfd is ready to run
+#wj200-vfd.N.is-alarm bit out
+#1 when vfd alarm is set
+#wj200-vfd.N.watchdog-out bit out
+#Alternates between 1 and 0 after every update cycle. Feed into a watchdog component to ensure vfd driver is communicating with the vfd properly.

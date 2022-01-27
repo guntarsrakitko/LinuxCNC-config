@@ -1,0 +1,18 @@
+{
+    "messages": [
+    ], 
+    "settings": {
+        "machine.jog.linear-speed": 2000, 
+        "probe-parameters.probe-tool-number": 999.0, 
+        "tool-change-position.x-tool-change-position": -3.4, 
+        "tool-change-position.y-tool-change-position": 461.22, 
+        "tool-change-position.z-tool-change-position": 0.01, 
+        "tool-setter-probe.fast-probe-fr": 300.0, 
+        "tool-setter-probe.retract-distance": 1.0, 
+        "tool-setter-probe.slow-probe-fr": 20.0, 
+        "tool-setter-probe.spindle-nose-height": 136.5319, 
+        "tool-setter-probe.xy-max-travel": 20.0, 
+        "tool-setter-probe.z-max-travel": 140.0
+    }, 
+    "tool-in-spindle": 2
+}

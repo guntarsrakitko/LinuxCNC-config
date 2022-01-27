@@ -1,0 +1,4 @@
+#!/bin/bash
+newtool=${1%.*}
+zenity --width=300  --height=100 --no-wrap --info  --title "Tool insert" --text "Please manually insert tool $newtool in spindel and press ok to continue"
+exit 0

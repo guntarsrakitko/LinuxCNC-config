@@ -1,0 +1,18 @@
+o<atc_check_presure> sub  
+  
+#1 = 0
+o100 do
+    M66 P4 L0                   ; Check air-presure-ok-sen sensor
+    #1 = #5399
+    o110 if [#5399 NE 1]             
+        M102                    ; Run M102 code - promt continue or cancel
+        M66 E1 L0               ; Read analog signal from M102 promt
+        o120 if [#5399 EQ 1]
+        M2                      ; If analog signal EQ 1 then cancel whole code. 
+        o120 endif
+    o110 endif
+o100 while [#1 EQ 0]            ; Loop until presure sensor goes hi
+
+o<atc_check_presure> endsub [1]
+
+M2

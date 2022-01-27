@@ -1,0 +1,6 @@
+net coolant-mist        <=  iocontrol.0.coolant-mist
+#net coolant-mist        =>  hm2_7i76e.0.7i76.0.0.output-09
+
+
+#net coolant-flood     <=  iocontrol.0.coolant-flood
+

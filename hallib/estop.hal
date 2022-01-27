@@ -1,0 +1,38 @@
+loadrt watchdog num_inputs=1
+addf watchdog.process servo-thread
+addf watchdog.set-timeouts servo-thread
+setp watchdog.timeout-0 3
+net vfd-watchdog => watchdog.input-0
+net estop-loopin  => watchdog.enable-in   
+net vdf-watchdog-out <= watchdog.ok-out
+
+addf not.1 servo-thread
+net vdf-watchdog-out => not.1.in
+net vdf-watchdog-out-n <= not.1.out
+
+
+
+addf lut5.3 servo-thread
+setp lut5.3.function 0xfffffffe
+net vdf-watchdog-out-n                  => lut5.3.in-0      #0
+net estop-vfdalarm wj200-vfd.0.is-alarm => lut5.3.in-1      #0
+net estop-button                        => lut5.3.in-2      #0
+net estop-foult                         <= lut5.3.out       #out
+
+
+loadrt estop_latch
+addf estop-latch.0 servo-thread 
+
+net estop-loopout   iocontrol.0.emc-enable-in       <= estop-latch.0.ok-out
+net estop-loopin    iocontrol.0.user-enable-out     => estop-latch.0.ok-in
+net estop-reset     iocontrol.0.user-request-enable => estop-latch.0.reset
+net estop-foult     estop-latch.0.fault-in
+net estop-out       estop-latch.0.fault-out
+
+
+net in-position                                     <=  motion.in-position
+net machine-is-enabled                              <=  motion.motion-enabled
+
+
+
+

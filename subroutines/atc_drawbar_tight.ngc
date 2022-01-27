@@ -1,0 +1,5 @@
+; M22
+o<atc_drawbar_tight> sub
+M65 P0                     ; Deactivate atc-sol-drawbar-loose
+o<atc_drawbar_tight> endsub [1]
+M2

@@ -1,0 +1,27 @@
+; M23
+
+o<atc_extend_tool_rack> sub
+      G90
+      G28.1
+      o100 if [#5162 GT [#<_ini[ATC]FIRSTPOCKET_Y> - #<_ini[ATC]SAFE_Y>]]
+            G53 G0 Y[#<_ini[ATC]FIRSTPOCKET_Y> - #<_ini[ATC]SAFE_Y>]
+      o100 endif
+      M65 P5                        ; Turn off tool-cover-sol-close
+      M64 P4                        ; Turn on  tool-cover-sol-open
+
+      M66 P6 L3 Q5
+      o200 if [#5399 NE 1]
+            (DEBUG, Timeout! Toolrack cover did not open! - Aborting!)
+            o<atc_extend_tool_rack> endsub [1]
+            M2
+      o200 endif  
+
+      M65 P3                        ; Turn off tool-rack-sol-retract
+      M64 P2                        ; Turn on tool-rack-sol-extend 
+      
+o<atc_extend_tool_rack> endsub [1]
+
+M2
+
+
+

@@ -1,0 +1,39 @@
+; o<restore> call [originmetric] [originabs] [originfeed] [originmist] [originflood]
+
+o<restore> sub
+
+; restore metric: inch/mm
+o10 if [#1 ne #<_metric>]
+  o11 if [#1]
+    G21
+  o11 else
+    G20
+  o11 endif
+o10 endif
+
+; restore coordinate system: absolute/incremental 
+o20 if [#2 ne #<_absolute>]
+  o21 if [#2]
+    G90
+  o21 else
+    G91
+  o21 endif
+o20 endif
+
+; restore feed speed
+o30 if [#3 ne #<_feed>]
+  F[#3]
+o30 endif
+
+; restore mist coolant
+o40 if [#4 eq 1]
+  M7
+o40 endif
+
+; restore flood coolant
+o50 if [#5 eq 1]
+  M8
+o50 endif
+
+o<restore> endsub
+M2

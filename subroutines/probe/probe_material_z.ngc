@@ -1,0 +1,9 @@
+; probe stock material height with the tool length sensor (z-finder)
+
+o<probe_material_z> sub
+	G10 L20 P2 Z0
+	G38.2 Z-#<_ini[PROBE_MATERIAL_Z]MAX_TRAVEL> f100
+	G10 L20 P2 Z#<_ini[PROBE_MATERIAL_Z]HEIGHT>
+	G1 G53 Z#<_ini[PROBE_MATERIAL_Z]MAX_TRAVEL> f200
+o<probe_material_z> endsub
+M2

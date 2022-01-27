@@ -1,0 +1,23 @@
+#loadrt debounce cfg=1
+#addf debounce.0 servo-thread
+
+#net probe-raw     <=  hm2_7i76e.0.7i76.0.0.input-09-not
+#setp debounce.0.delay 100
+#net probe-raw  => debounce.0.0.in
+#net probe-in debounce.0.0.out => motion.probe-input
+
+
+
+
+net probe-in-z-3d     =>  motion.probe-input
+#net probe-in     <=  hm2_7i76e.0.7i76.0.0.input-09-not
+
+
+#loadrt or2 count=1
+#addf or2.0 servo-thread
+
+#net probe-in-z     <=  or2.0.in0 <=  hm2_7i76e.0.7i76.0.0.input-09-not
+#net probe-in-3d    <=  or2.0.in1 <=  hm2_7i76e.0.7i76.0.0.input-11-not
+#net probe-in       <=  motion.probe-input <= or2.0.out
+
+#net probe-3d-out   <=  motion.digital-out-00 => hm2_7i76e.0.7i76.0.0.output-05

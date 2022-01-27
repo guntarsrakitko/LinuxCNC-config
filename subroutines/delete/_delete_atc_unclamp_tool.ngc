@@ -1,0 +1,19 @@
+; M22
+o<atc_unclamptool> sub
+
+;M65 P3 ; Turn off dust removal
+M65 P1 ; Deactivate atc-air-return-sol
+M64 P0 ; Activate atc-clamp-unclamp-tool-sol
+
+
+;M64 P2 ; unclamp the tool
+
+M66 P0 L3 Q3 ;check the atc-tool-unclamped-sen
+   O100 if [#5399 LT 0]
+      (abort, failed to release tool) ; abort if the sensor does not activate in 3 seconds
+      M65 P0 ; Deactivate atc-clamp-unclamp-tool-sol
+   O100 endif
+
+o<atc_unclamptool> endsub [1]
+
+M2

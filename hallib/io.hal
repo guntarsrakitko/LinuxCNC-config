@@ -1,0 +1,84 @@
+#*******************
+#  IO - INPUTS 
+#*******************
+# ---AI-00 --- 
+# ---AI-01 ---
+# ---AI-02 ---
+# ---AI-03 ---
+net home-x                          <= hm2_7i76e.0.7i76.0.0.input-04-not    # ---DI-04 ---
+net home-y                          <= hm2_7i76e.0.7i76.0.0.input-05-not    # ---DI-05 ---
+net home-y2                         <= hm2_7i76e.0.7i76.0.0.input-06-not    # ---DI-06 ---
+net home-z                          <= hm2_7i76e.0.7i76.0.0.input-07        # ---DI-07 ---
+net estop-button                    <= hm2_7i76e.0.7i76.0.0.input-08-not    # ---DI-08 ---
+net probe-in-z-3d                   <= hm2_7i76e.0.7i76.0.0.input-09-not    # ---DI-09 ---
+net probe-in-z-3d-error             <= hm2_7i76e.0.7i76.0.0.input-10        # ---DI-10 ---
+net atc-sen-tool-loaded             <= hm2_7i76e.0.7i76.0.0.input-11        # ---DI-11 ---
+net atc-sen-drawbar-loose           <= hm2_7i76e.0.7i76.0.0.input-12        # ---DI-12 ---
+net air-presure-1-ok-sen            <= hm2_7i76e.0.7i76.0.0.input-13        # ---DI-13 ---
+net air-presure-2-ok-sen            <= hm2_7i76e.0.7i76.0.0.input-14        # ---DI-14 ---
+net air-presure-ok-sen              <= hm2_7i76e.0.7i76.0.0.input-15-not    # ---DI-15 ---
+net tool-rack-sen-retracted         <= hm2_7i76e.0.7i76.0.0.input-16        # ---DI-16 ---
+net tool-rack-sen-extended          <= hm2_7i76e.0.7i76.0.0.input-17        # ---DI-17 ---
+net atc-drawbar-loose-manual-button <= hm2_7i76e.0.7i76.0.0.input-18        # ---DI-18 ---
+# net button                        <= hm2_7i76e.0.7i76.0.0.input-19        # ---DI-19 ---
+net tool-cover-sen-closed           <= hm2_7i76e.0.7i76.0.0.input-20        # ---DI-20 ---
+net tool-cover-sen-opened           <= hm2_7i76e.0.7i76.0.0.input-21        # ---DI-21 ---
+# ---DI-22 ---
+# ---DI-23 ---
+# ---DI-24 ---
+# ---DI-25 ---
+# ---DI-26 ---
+# ---DI-27 ---
+# ---DI-28 ---
+# ---DI-29 ---
+# ---DI-30 ---
+# ---DI-31 ---
+# ---DI-32 ---
+
+#*******************
+#  IO - OUTPUTS 
+#*******************
+net machine-is-enabled          => hm2_7i76e.0.7i76.0.0.output-00       # ---DO-00 --- stepper-enable
+net machine-is-enabled          => hm2_7i76e.0.7i76.0.0.output-01       # ---DO-01 --- air-enable
+net spindle-enable-ok           => hm2_7i76e.0.7i76.0.0.output-02       # ---DO-02 --- chiller-enable 
+net atc-sol-drawbar-loose       => hm2_7i76e.0.7i76.0.0.output-03       # ---DO-03 --- (air inlet)
+net atc-sol-air-return          => hm2_7i76e.0.7i76.0.0.output-04       # ---DO-04 --- (air return)
+net tool-rack-sol-extend        => hm2_7i76e.0.7i76.0.0.output-05       # ---DO-05 --- 
+net tool-rack-sol-retract       => hm2_7i76e.0.7i76.0.0.output-06       # ---DO-06 --- 
+net spindle-enable-ok           => hm2_7i76e.0.7i76.0.0.output-07       # ---DO-07 --- (air-sealed)    
+net atc-sol-dust-removal        => hm2_7i76e.0.7i76.0.0.output-08       # ---DO-08 --- (dust removal)
+net coolant-mist                <= hm2_7i76e.0.7i76.0.0.output-09       # ---DO-09 ---
+net dust-tool-setter-sol        => hm2_7i76e.0.7i76.0.0.output-10       # ---DO-10 ---
+# ---DO-11 ---
+# ---DO-12 ---
+net tool-cover-sol-open         => hm2_7i76e.0.7i76.0.0.output-13       # ---DO-13 ---
+net tool-cover-sol-close        => hm2_7i76e.0.7i76.0.0.output-14       # ---DO-14 ---
+# ---DO-15 ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

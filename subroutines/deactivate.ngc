@@ -1,0 +1,11 @@
+; o<deactivate>
+
+o<deactivate> sub
+
+; deactivate coolant
+o11 if [[#<_mist> eq 1] or [#<_flood> eq 1]]
+  M9
+o11 endif
+
+o<deactivate> endsub
+M2

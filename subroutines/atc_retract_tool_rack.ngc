@@ -1,0 +1,27 @@
+; M24
+
+o<atc_retract_tool_rack> sub
+
+      M66 P6 L3 Q5
+      o100 if [#5399 NE 1]
+            (DEBUG, Timeout! Toolrack cover is not open! - Aborting!)
+            o<atc_retract_tool_rack> endsub [1]
+            M2
+      o100 endif  
+
+      M65 P2                        ; Turn off tool-rack-sol-extend
+      M64 P3                        ; Turn on tool-rack-sol-retract
+
+      M66 P2 L3 Q5
+      o200 if [#5399 NE 1]
+            (DEBUG, Timeout! Toolrack did not retract! - Aborting!)
+            o<atc_retract_tool_rack> endsub [1]
+            M2
+      o200 endif  
+
+      M65 P4                        ; Turn off tool-cover-sol-open
+      M64 P5                        ; Turn on tool-cover-sol-close
+
+      o<atc_retract_tool_rack> endsub [1]
+
+M2

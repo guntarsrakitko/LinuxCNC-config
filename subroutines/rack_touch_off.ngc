@@ -1,0 +1,32 @@
+o<rack_touch_off> sub
+
+
+
+
+
+
+#<tool_to_touch_off> = 1 (assign parameter #1 the value of 0)
+o100 do
+    
+    M61 Q#<tool_to_touch_off>
+
+    ;o110 if [#<newpocket> LT 15]
+        (debug, _current_tool = #<_current_tool>)
+        (debug, _current_pocket = #<_current_pocket>)
+    ;o110 endif
+
+
+
+  #<tool_to_touch_off> = [#<tool_to_touch_off> + 1] (increment the test counter)
+o100 while [#<tool_to_touch_off> LT 100]
+(debug, Loop Done!)
+
+M61 Q0
+
+
+
+
+o<rack_touch_off> endsub [1]
+
+M2
+%
